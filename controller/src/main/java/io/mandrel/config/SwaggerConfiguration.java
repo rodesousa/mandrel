@@ -18,46 +18,67 @@
  */
 package io.mandrel.config;
 
-import io.mandrel.common.settings.InfoSettings;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
-import com.mangofactory.swagger.models.dto.ApiInfo;
-import com.mangofactory.swagger.models.dto.builder.ApiInfoBuilder;
-import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider;
-import com.mangofactory.swagger.plugin.EnableSwagger;
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@EnableSwagger
+@EnableSwagger2
 public class SwaggerConfiguration {
 
-	private SpringSwaggerConfig springSwaggerConfig;
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build();
+    }
 
-	@Autowired
-	public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
-		this.springSwaggerConfig = springSwaggerConfig;
-	}
-
-	@Bean
-	public SwaggerSpringMvcPlugin customImplementation(InfoSettings settings) {
-		SwaggerSpringMvcPlugin swaggerSpringMvcPlugin = new SwaggerSpringMvcPlugin(this.springSwaggerConfig);
-		return swaggerSpringMvcPlugin.pathProvider(swaggerPathProvider()).apiInfo(apiInfo(settings)).includePatterns("/logs", "/nodes", "/spiders")
-				.apiVersion(settings.getVersion());
-	}
-
-	private ApiInfo apiInfo(InfoSettings settings) {
-		ApiInfoBuilder apiInfoBuilder = new ApiInfoBuilder();
-		apiInfoBuilder.description(settings.getDescription());
-		apiInfoBuilder.title(settings.getName() + "(" + settings.getArtifact() + ")");
-		return apiInfoBuilder.build();
-	}
-
-	@Bean
-	public AbsoluteSwaggerPathProvider swaggerPathProvider() {
-		return new AbsoluteSwaggerPathProvider();
-	}
+//import io.mandrel.common.settings.InfoSettings;
+//
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//
+//import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
+//import com.mangofactory.swagger.models.dto.ApiInfo;
+//import com.mangofactory.swagger.models.dto.builder.ApiInfoBuilder;
+//import com.mangofactory.swagger.paths.AbsoluteSwaggerPathProvider;
+//import com.mangofactory.swagger.plugin.EnableSwagger;
+//import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
+//
+//@Configuration
+//@EnableSwagger
+//public class SwaggerConfiguration {
+//
+//	private SpringSwaggerConfig springSwaggerConfig;
+//
+//	@Autowired
+//	public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
+//		this.springSwaggerConfig = springSwaggerConfig;
+//	}
+//
+//	@Bean
+//	public SwaggerSpringMvcPlugin customImplementation(InfoSettings settings) {
+//		SwaggerSpringMvcPlugin swaggerSpringMvcPlugin = new SwaggerSpringMvcPlugin(this.springSwaggerConfig);
+//		return swaggerSpringMvcPlugin.pathProvider(swaggerPathProvider()).apiInfo(apiInfo(settings)).includePatterns("/logs", "/nodes", "/spiders")
+//				.apiVersion(settings.getVersion());
+//	}
+//
+//	private ApiInfo apiInfo(InfoSettings settings) {
+//		ApiInfoBuilder apiInfoBuilder = new ApiInfoBuilder();
+//		apiInfoBuilder.description(settings.getDescription());
+//		apiInfoBuilder.title(settings.getName() + "(" + settings.getArtifact() + ")");
+//		return apiInfoBuilder.build();
+//	}
+//
+//	@Bean
+//	public AbsoluteSwaggerPathProvider swaggerPathProvider() {
+//		return new AbsoluteSwaggerPathProvider();
+//	}
 }
