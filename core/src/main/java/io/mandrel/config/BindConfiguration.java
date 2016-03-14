@@ -18,14 +18,6 @@
  */
 package io.mandrel.config;
 
-import io.mandrel.common.jackson.LocalDateTimeDeserializer;
-import io.mandrel.common.jackson.LocalDateTimeSerializer;
-
-import java.time.LocalDateTime;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -33,10 +25,19 @@ import com.fasterxml.jackson.databind.deser.std.CustomLongDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.hppc.HppcModule;
+import com.google.inject.name.Named;
+import io.mandrel.common.jackson.LocalDateTimeDeserializer;
+import io.mandrel.common.jackson.LocalDateTimeSerializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+import java.time.LocalDateTime;
 
 @Configuration
 public class BindConfiguration {
 
+	@Primary
 	@Bean
 	public ObjectMapper mapper() {
 		ObjectMapper objectMapper = new ObjectMapper();
